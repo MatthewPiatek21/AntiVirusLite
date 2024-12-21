@@ -1,3 +1,4 @@
+cat > .gitignore << 'EOL'
 # Python
 __pycache__/
 *.py[cod]
@@ -20,17 +21,56 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# Virtual Environment
 venv/
+env/
 ENV/
+.env
+.venv
+env.bak/
+venv.bak/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
 # Project specific
 data/
 logs/
 quarantine/
 *.log
-.DS_Store
+signatures/
+reports/
+health_logs/
+alerts/
+analysis/
 
-# IDE
-.idea/
-.vscode/
-*.swp
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+EOL
