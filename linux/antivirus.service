@@ -1,0 +1,13 @@
+[Unit]
+Description=AntiVirus Protection Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/antivirus
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target 

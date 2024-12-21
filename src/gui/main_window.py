@@ -221,33 +221,40 @@ class MainWindow(QMainWindow):
         
         # Update results table
         self.results_table.setRowCount(0)
-        threats_found = 0
         
+        # Show all scanned files, not just infected ones
         for result in results:
-            if result.get('threats'):
-                threats_found += len(result['threats'])
-                row = self.results_table.rowCount()
-                self.results_table.insertRow(row)
-                
-                self.results_table.setItem(row, 0, 
-                    QTableWidgetItem(str(result['file_path'])))
-                self.results_table.setItem(row, 1, 
-                    QTableWidgetItem('Infected'))
-                self.results_table.setItem(row, 2, 
-                    QTableWidgetItem(result['threats'][0]['type']))
-                
-                action = 'Quarantined' if result.get('quarantined') else 'Detected'
-                self.results_table.setItem(row, 3, 
-                    QTableWidgetItem(action))
+            row = self.results_table.rowCount()
+            self.results_table.insertRow(row)
+            
+            # File path
+            self.results_table.setItem(row, 0, 
+                QTableWidgetItem(str(result['file_path'])))
+            
+            # Status
+            status = 'Infected' if result.get('threats') else 'Clean'
+            self.results_table.setItem(row, 1, 
+                QTableWidgetItem(status))
+            
+            # Threat Type
+            threat_type = result.get('threats', [{'type': 'None'}])[0]['type'] if result.get('threats') else 'None'
+            self.results_table.setItem(row, 2, 
+                QTableWidgetItem(threat_type))
+            
+            # Action
+            action = 'Quarantined' if result.get('quarantined') else 'None'
+            self.results_table.setItem(row, 3, 
+                QTableWidgetItem(action))
         
         # Show summary
-        if threats_found > 0:
-            QMessageBox.warning(self, 'Scan Complete', 
-                f'Found {threats_found} threat(s).\nCheck the results table for details.')
-        else:
-            QMessageBox.information(self, 'Scan Complete', 
-                'No threats found.')
-            
+        total_files = len(results)
+        threats_found = sum(1 for r in results if r.get('threats'))
+        
+        QMessageBox.information(self, 'Scan Complete', 
+            f'Scanned {total_files} files.\n'
+            f'Found {threats_found} threat(s).\n'
+            f'Check the results table for details.')
+        
     def _scan_error(self, error_msg):
         """Handle scan error"""
         # Stop monitoring on error
